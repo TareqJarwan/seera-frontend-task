@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  margin: 3rem 6rem 0;
+  padding: 2rem;
+
+  border: 1px solid #000;
+  background: rgb(237, 241, 243);
+}

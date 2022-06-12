@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 1rem 6rem 0;
+  padding: 1rem 2rem;
+
+  flex-wrap: wrap;
+  min-width: 800px;
+}
+
+.nights {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.btnContainer button {
+  margin-left: 0.5rem;
+}
