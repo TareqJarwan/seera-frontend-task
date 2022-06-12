@@ -29,7 +29,6 @@ const Sidebar = ({ filters, setFilters, min, max }: propsType) => {
             <CustomSlider
                 label='Price Filter'
                 name='name'
-                value={String(filters.price)}
                 min={min}
                 max={max}
                 onChange={(e, value) => setFilters({ ...filters, price: Number(value) })}

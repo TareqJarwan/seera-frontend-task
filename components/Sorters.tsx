@@ -1,28 +1,19 @@
 import React from 'react'
 import { Button } from '@mui/material'
-import { useRouter } from 'next/router';
 
 import { IFilters } from '../models/IFilters';
-import { getNights } from '../utils/util';
-
 import styles from '../styles/Sorters.module.css';
 
 interface propsType {
+    nightsNumber: number;
     filters: IFilters;
     setFilters: Function
 }
 
-const Sorters = ({ filters, setFilters }: propsType) => {
-    const router = useRouter();
-    const { query } = router;
-
-    const { fromDate, toDate } = query;
-
-    const nights = getNights(fromDate, toDate);
-
+const Sorters = ({ nightsNumber, filters, setFilters }: propsType) => {
     return (
         <div className={styles.container}>
-            <p className={styles.nights}>Total Nights : {nights || 0}</p>
+            <p className={styles.nights}>Total Nights : {nightsNumber || 0}</p>
             <div className={styles.btnContainer}>
                 <Button
                     variant={filters.sort === 'name' ? 'contained' : 'outlined'}

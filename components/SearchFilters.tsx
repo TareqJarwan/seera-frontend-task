@@ -15,7 +15,6 @@ interface propsType {
 const SearchFilters = ({ filters, setFilters }: propsType) => {
 
     const handleDateChange = (date: Date, name: string) => {
-        console.log(date, name)
         setFilters({ ...filters, [name]: date.toISOString().split('T')[0] });
     };
 
@@ -33,7 +32,7 @@ const SearchFilters = ({ filters, setFilters }: propsType) => {
                 label="To Date"
                 placeholder='Select Date'
                 value={filters.toDate}
-                onChange={(date: Date | null) => handleDateChange(date ? date : new Date(), 'toDate')} />
+                onChange={(date: Date | null) => handleDateChange(date ? date : new Date(new Date().setFullYear(new Date().getFullYear() + 1)), 'toDate')} />
 
             <Link href={`hotels/?fromDate=${filters.fromDate}&toDate=${filters.toDate}`}>
                 <Button

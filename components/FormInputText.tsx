@@ -10,10 +10,9 @@ interface propTypes {
     value?: string;
     placeholder?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onKeyUp?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
-const FormInputText = ({ name, placeholder, label, onChange, onKeyUp, value, type = "text" }: propTypes) => {
+const FormInputText = ({ name, placeholder, label, onChange, value, type = "text" }: propTypes) => {
 
     return (
         <Grid item xs={12} sx={{ m: 1, width: 300 }}>
@@ -26,7 +25,6 @@ const FormInputText = ({ name, placeholder, label, onChange, onKeyUp, value, typ
                 id={name}
                 placeholder={placeholder}
                 onChange={onChange}
-                onKeyUp={onKeyUp}
                 value={value}
                 type={type}
                 sx={{ marginTop: '8px' }}

@@ -1,6 +1,6 @@
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-export const getNights = (fromDate: string | string[] | undefined, toDate: string | string[] | undefined) => {
+export const getNightsNumber = (fromDate: string | string[] | undefined, toDate: string | string[] | undefined) => {
     const value1 = Array.isArray(fromDate) ? fromDate[0] : fromDate;
     const value2 = Array.isArray(toDate) ? toDate[0] : toDate;
 

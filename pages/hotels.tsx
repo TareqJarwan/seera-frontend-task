@@ -1,44 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import type { NextPage, GetStaticProps } from 'next'
+import type { NextPage, GetServerSideProps } from 'next'
 import { useRouter } from 'next/router';
 
-import { SearchFilters, Sidebar, HotelCards, Sorters } from '../components';
+import { Sidebar, HotelCards, Sorters } from '../components';
 
-import { filterHotelsFun, updateRouterQuery } from '../utils/filterData';
+import { filterHotelsByFiltersFun, filterHotelsByQueryFun, setQueryParams, updateRouterQuery } from '../utils/filterData';
 import { fetchApi } from '../utils/fetchApi'
+import { getNightsNumber } from '../utils/util';
 
 import { IFilters } from '../models/IFilters';
 import { IHotelData } from '../models/IHotelData'
 
 import styles from '../styles/Home.module.css';
-import { ParsedUrlQuery } from 'querystring';
-
-const initialFilters = {
-    s: '',
-    price: '',
-    fromDate: new Date().toISOString().split('T')[0],
-    toDate: new Date().toISOString().split('T')[0],
-    sort: ''
+interface propsType {
+    hotels: IHotelData[],
+    nightsNumber: number,
+    min: number,
+    max: number,
+    initFilters: IFilters
 }
 
-const Hotels: NextPage<{ hotels: IHotelData[], min: number, max: number }> = ({ hotels, min, max }) => {
-    const [filters, setFilters] = useState<IFilters>(initialFilters);
-
+const Hotels: NextPage<propsType> = ({ hotels, nightsNumber, min, max, initFilters }) => {
+    const [filters, setFilters] = useState<IFilters>(initFilters);
     const [filteredHotels, setFilteredHotels] = useState<IHotelData[]>([]);
 
     const router = useRouter();
 
     useEffect(() => {
-        console.log('fff')
         setFilteredHotels(hotels);
-        setFilters(prevFilters => ({ ...prevFilters, price: String(max) }));
     }, []);
 
 
     useEffect(() => {
-        console.log('sss')
         // apply filters on the hotels array
-        let data = filterHotelsFun(hotels, filters);
+        let data = filterHotelsByFiltersFun(hotels, nightsNumber, filters);
         setFilteredHotels(data);
 
         // update the query params 
@@ -47,47 +42,34 @@ const Hotels: NextPage<{ hotels: IHotelData[], min: number, max: number }> = ({ 
 
     }, [filters]);
 
-    useEffect(() => {
-        const keys = Object.keys(filters);
-
-        keys.forEach((item) => {
-            setFilters((prevState) => ({
-                ...prevState,
-                // @ts-ignore
-                [item]: router.query[item] as any || initialFilters[item]
-            }));
-        });
-
-    }, [router.query]);
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <SearchFilters filters={filters} setFilters={setFilters} />
-
             <div className={styles.container}>
-                <Sidebar hotels={filteredHotels} filters={filters} setFilters={setFilters} min={min} max={max} />
+                <Sidebar hotels={filteredHotels} filters={filters} setFilters={setFilters} min={min * nightsNumber} max={max * nightsNumber} />
 
                 <div style={{ width: '1200px' }}>
-                    <Sorters filters={filters} setFilters={setFilters} />
-                    <HotelCards hotels={filteredHotels} />
+                    <Sorters filters={filters} setFilters={setFilters} nightsNumber={nightsNumber} />
+                    <HotelCards hotels={filteredHotels} nightsNumber={nightsNumber} />
                 </div>
             </div>
         </div>
     )
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const res: IHotelData[] = await fetchApi();
-    //const data = filterHotelsFun(res);
-    const data = res;
-
-    const prices = data.map(hotel => parseInt(hotel.price));
+    const prices = res.map(hotel => parseInt(hotel.price));
+    const { fromDate, toDate } = query;
+    const nightsNumber = getNightsNumber(fromDate, toDate);
+    const filteredHotels = filterHotelsByQueryFun(res, nightsNumber, query);
 
     return {
         props: {
-            hotels: data,
+            hotels: filteredHotels,
+            nightsNumber,
             min: Math.min(...prices),
             max: Math.max(...prices),
+            initFilters: setQueryParams(query)
         }
     }
 }

@@ -1,4 +1,3 @@
-export { default as CustomSelectList } from './CustomSelectList';
 export { default as CustomDatePicker } from './CustomDatePicker';
 export { default as FormInputText } from './FormInputText';
 export { default as CustomSlider } from './CustomSlider';

@@ -9,9 +9,9 @@ import styles from '../styles/Home.module.css';
 const Home: NextPage = () => {
   const [filters, setFilters] = useState<IFilters>({
     s: '',
-    price: 0,
-    fromDate: new Date().toISOString().split('T')[0],
-    toDate: new Date().toISOString().split('T')[0],
+    price: '',
+    fromDate: new Date("2022-08-15").toISOString().split('T')[0],
+    toDate: new Date("2022-12-16").toISOString().split('T')[0],
     sort: ''
   });
 
